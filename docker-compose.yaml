@@ -1,0 +1,34 @@
+version: "3"
+services:
+  php:
+    container_name: php
+    build:
+      context: ./
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/var/www/html/app
+
+  mysql:
+    container_name: mysql
+    build:
+      context: ./
+      dockerfile: Dockerfile_mysql
+    ports:
+      - 33060:3306
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: masaru_do
+      MYSQL_ROOT_PASSWORD: example
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8001:80
+    environment:
+      - PMA_ARBITRARY=0
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=example
+      - UPLOAD_LIMIT=100000000
